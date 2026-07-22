@@ -1,63 +1,57 @@
-# Vans Custom Order Form — Azure Static Web Apps deployment
+# Vans Custom Order Form — Azure Static Web Apps deployment (final, correct structure)
 
-Same form, same guest experience, running on Azure instead of Claude or
-Vercel — likely the closest fit to Visit Anaheim's existing Microsoft 365
-environment.
+This is the complete, correct file set — everything from earlier attempts
+consolidated into one clean folder tree. Use this to replace what's
+currently in your GitHub repo.
 
-## What's in this folder
-- `index.html` — the guest-facing form + team master sheet. **Identical** to
-  the Vercel version — Azure Static Web Apps uses the same `/api` routing
-  convention, so nothing on the frontend needed to change.
-- `api/` — an Azure Function (v4 programming model) that replaces Vercel's
-  API route, using **Azure Table Storage** instead of Vercel KV.
-- `staticwebapp.config.json` — tells Azure the `/api/*` routes are public
-  (guests need to reach them without logging in).
+## The exact folder structure (this matters)
 
-## Setup
+```
+vans-order-form/
+├── index.html
+├── staticwebapp.config.json
+├── README.md
+└── api/
+    ├── host.json
+    ├── package.json
+    ├── local.settings.json.example
+    └── submissions/
+        ├── function.json
+        └── index.js
+```
 
-### 1. Push this folder to a GitHub repo
-Same as the Vercel version — create a repo, push these files.
+Azure's Static Web App is configured with "Api location: `api`" — so
+everything backend-related MUST be nested inside a folder literally named
+`api`, and the function itself inside `api/submissions/`. Nothing should
+sit loose at the repo root except `index.html`, `staticwebapp.config.json`,
+and this README.
 
-### 2. Create the Static Web App resource
-In the Azure Portal: **Create a resource → Static Web App**.
-- Pick the **Free** or **Standard** plan (Free is fine for a one-day event).
-- Under "Deployment details," connect it to your GitHub repo and branch.
-- App location: `/` — API location: `api` — Output location: (leave blank).
+## How to use this to fix your repo
 
-Azure automatically creates a GitHub Actions workflow in your repo that
-builds and deploys on every push — no manual deploy steps after this.
+**Recommended: replace everything at once, rather than moving files
+around one by one.**
 
-### 3. Create a Storage Account (for Table Storage)
-In the Azure Portal: **Create a resource → Storage account** (any name,
-Standard performance, LRS redundancy is fine for this use case).
-Once created, go to **Access keys** and copy a **Connection string**.
+1. In GitHub Desktop, go to **Repository → Show in Finder** to find your
+   local repo folder.
+2. Delete **everything** inside that folder (all the loose files from
+   earlier attempts — `oldindex.html`, `oldpackage.json`, `submissions.js`,
+   loose `function.json`/`index.js`/`host.json`/`package.json` at the root,
+   all of it). Leave the `.git` folder and `.github` folder alone if you
+   see them (hidden folders — don't touch those).
+3. Copy every file from this download into that now-empty folder, keeping
+   the `api/submissions/` nesting exactly as shown above.
+4. Back in GitHub Desktop, you'll see a large list of changes (deletions
+   and additions) — that's expected and correct.
+5. Commit with a message like "clean up folder structure."
+6. Click **Push origin**.
 
-### 4. Add configuration to the Static Web App
-In your Static Web App resource: **Settings → Configuration → Add**:
-- `AZURE_TABLES_CONNECTION_STRING` = the connection string from step 3
-- `TEAM_ACCESS_CODE` = whatever code your team should use to unlock the
-  master sheet
+## After pushing
+Check the **Actions** tab on GitHub for the new deployment run. Once it
+shows a green checkmark, give it a minute, then retest submitting an entry
+on your live site.
 
-Save — this triggers the Function app to restart with the new settings.
-
-### 5. Test it for real
-- Open the URL Azure gives your Static Web App
-  (`https://<something>.azurestaticapps.net`).
-- Submit a test entry.
-- Unlock the master sheet with your access code and confirm it shows up.
-- Open the same URL on a second device to confirm syncing works.
-
-## Local development (optional)
-If you want to test the Function app locally before deploying:
-1. `cd api && npm install`
-2. Copy `local.settings.json.example` to `local.settings.json` and fill in
-   real values (this file is gitignored — never commit real secrets).
-3. `npm start` (requires the Azure Functions Core Tools installed).
-
-## What changed from the Vercel version
-- The frontend `index.html` is untouched.
-- The API implementation swapped from Vercel KV to Azure Table Storage —
-  functionally identical (each submission is one record), just a different
-  SDK (`@azure/data-tables` instead of `@vercel/kv`).
-- The access code is still checked **server-side only**, in the Function
-  app — never shipped to the browser.
+## Configuration reminder
+These two still need to be set in the Static Web App's **Configuration**
+in the Azure Portal (this part doesn't change with this file update):
+- `AZURE_TABLES_CONNECTION_STRING` — from your storage account's Access keys
+- `TEAM_ACCESS_CODE` — whatever code your team uses to unlock the master sheet
