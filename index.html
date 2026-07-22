@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Custom Kicks Order Form</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsSAAALEgHS3X78AAACz0lEQVRYhcWWQVbbMBCGP/rYk56gvgHcAHejLd5rUXOCwg3oCXBPULPQGmfrlXOChhOQ3CA5gbvQCMZCtgNtYd7zSySP9f+af2ako77v+Uj79KHowPF7AxrnamABVK213dF7SmCcK4Ffaurun0lgnMuMc9nE+zOgiqa7vyJgnOuNc7kMa+DROLeRMMdWAydqvG2trQ/OAdldhdevaK3dAXsgB7rW2tw414l7F31bAacJQq+qggrIgB1wJnNrmQt2DtSttbUCL4DvifVqeH0VnMpzYZy7FAJnApSLT6fAswAU2bK1djNLQBKnBG7k9wq/42/i0ggJgA3wIyys3mvd9TyzBASsxOtcylwuQLV2FOAbRT6l+wsCs31AotDgk+8qBh75pgDuR14vW2uLMEhGwDi3wGtZttauhUSNT8A58Iy07sEaPRiTYCG/v41z1621FVCM+KYAtO5L4GKMQLIMRc8CWAG3qr4nLaH7deTyIP1jmoBxbg084usaniMyBV4yrPelRE7vfmecayRHgHEJrgBaa7s5YAFP9fnMOLeJ5sKGnnzfdBpK08nwTSg8qXofs89BioM6oQAWAnQ+7T1qW3yz6nQejBIQ0FKAD93dHt8Z1wJ2q95VkhMDe0FAEqQCvhwApondtdaWap088u9SizwRkObTMB7ilSzS4fXXN5sHJHGVDQi01q5J2LEC73jZu7f4/t4E3WRnGnwP5HF983xkB/JJCxFoIvAtvu8PupY6F+bAYRiBbpSAaK7D/pBaVMA7hrqXqdDKeaD9kuEH3wnjHl8kwIsE+GUcIWV5NJ4kkKnxKrpQhBZ7H4H/nDmWtf77eM2YwOBDCXW4ZjcMEw58ucUZH1uu/o/uHnwS6tI7wR/BY/6DWp8wndDdHIEaX2pz3e7ywNvQAviqpjZT/kd93+vySnW/Fb4kJ0P5VhuchpJwGf783+Eb0H8BDvYH0P4r7lyV4jEAAAAASUVORK5CYII=">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -102,9 +103,47 @@
   .error{color:var(--danger); font-size:13px; margin-top:6px;}
   .status{font-size:13px; color:var(--faint); margin-top:8px;}
 
-  .confirm{text-align:center; padding:40px 20px;}
+  .confirm{text-align:center; padding:40px 20px; position:relative; overflow:visible;}
   .confirm .tag{display:inline-block; background:var(--sand); border:1px dashed var(--line); border-radius:var(--radius); padding:20px 28px; margin:20px 0;}
   .confirm .code{font-family:'IBM Plex Mono', monospace; font-size:14px; letter-spacing:1px; color:var(--teal); font-weight:600;}
+
+  @keyframes pop-in{
+    0%{ transform:scale(0); opacity:0; }
+    60%{ transform:scale(1.15); opacity:1; }
+    100%{ transform:scale(1); opacity:1; }
+  }
+  .confirm-badge{
+    width:84px; height:84px; border-radius:50%; background:var(--teal-dark);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 8px;
+    animation:pop-in 0.5s cubic-bezier(.34,1.56,.64,1);
+  }
+  .confirm-badge svg{ width:42px; height:42px; }
+
+  @keyframes confetti-fall{
+    0%{ transform:translateY(-10px) rotate(0deg); opacity:1; }
+    100%{ transform:translateY(260px) rotate(360deg); opacity:0; }
+  }
+  .confetti-wrap{ position:relative; height:0; overflow:visible; pointer-events:none; }
+  .confetti-piece{ position:absolute; top:0; width:9px; height:9px; animation:confetti-fall 1.7s ease-in forwards; }
+
+  .next-steps{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:26px 0 6px; text-align:left; }
+  .next-step{
+    flex:1; min-width:160px; max-width:200px; background:var(--sand); border:1px solid var(--line);
+    border-radius:var(--radius); padding:14px 16px;
+  }
+  .next-step .num{
+    display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px;
+    border-radius:50%; background:var(--teal-dark); color:var(--paper); font-family:'IBM Plex Mono', monospace;
+    font-size:12px; font-weight:700; margin-bottom:8px;
+  }
+  .next-step p{ margin:0; font-size:14px; color:var(--ink); font-weight:500; line-height:1.35; }
+
+  .copy-code-btn{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.5px; text-transform:uppercase;
+    background:none; border:1px solid var(--teal-dark); color:var(--teal-dark); border-radius:var(--radius);
+    padding:4px 10px; margin-left:10px; cursor:pointer; vertical-align:middle;
+  }
+  .copy-code-btn:hover{ background:var(--teal-dark); color:var(--paper); }
 
   .team-toggle{text-align:center; margin-top:40px;}
   .team-toggle button{background:none; border:none; font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:1px; text-transform:uppercase; color:var(--faint); cursor:pointer; text-decoration:underline;}
@@ -272,11 +311,23 @@
 
   <div id="confirmView" style="display:none;">
     <div class="confirm">
+      <div class="confetti-wrap" id="confettiWrap"></div>
+      <div class="confirm-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--paper)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>
+      </div>
       <p class="eyebrow" style="text-align:center;">Received</p>
       <h1 class="title">You're In! &#127881;</h1>
       <p class="subtitle" style="margin:0 auto;">Your one-of-a-kind design just landed on our master list. We'll place one big order with Vans that brings everyone's kicks to life &mdash; yours included.</p>
-      <div class="tag"><div>Reference code</div><div class="code" id="refCode"></div></div>
-      <p class="subtitle" style="margin:0 auto;">Noticed a mistake? Just find your program coordinator &mdash; no need to resubmit.</p>
+      <div class="tag"><div>Reference code</div><div class="code" id="refCode"></div><button class="copy-code-btn" id="copyRefBtn" type="button">Copy</button></div>
+
+      <div class="next-steps">
+        <div class="next-step"><span class="num">1</span><p>We collect every design from today's guests</p></div>
+        <div class="next-step"><span class="num">2</span><p>We place one big consolidated order with Vans</p></div>
+        <div class="next-step"><span class="num">3</span><p>Your custom kicks ship straight to you</p></div>
+      </div>
+
+      <p class="subtitle" style="margin:16px auto 0;">Noticed a mistake? Just find your program coordinator &mdash; no need to resubmit.</p>
+      <button class="submit" id="nextGuestBtn" type="button" style="max-width:320px; margin-top:16px;">Design The Next Pair! &#128094;</button>
     </div>
   </div>
 
@@ -459,6 +510,35 @@ function refCode(){
   return "VANS-" + stamp + "-" + rand;
 }
 
+const confettiColors = ["#77C7C9", "#43A3A3", "#125C60", "#E8DEC7", "#C9BBA0"];
+function launchConfetti(){
+  const wrap = document.getElementById("confettiWrap");
+  wrap.innerHTML = "";
+  const pieceCount = 24;
+  for(let i = 0; i < pieceCount; i++){
+    const piece = document.createElement("div");
+    piece.className = "confetti-piece";
+    piece.style.left = (Math.random() * 100) + "%";
+    piece.style.background = confettiColors[i % confettiColors.length];
+    piece.style.animationDelay = (Math.random() * 0.3) + "s";
+    piece.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+    wrap.appendChild(piece);
+  }
+  setTimeout(() => { wrap.innerHTML = ""; }, 2200);
+}
+
+document.getElementById("copyRefBtn").addEventListener("click", async () => {
+  const btn = document.getElementById("copyRefBtn");
+  try{
+    await navigator.clipboard.writeText(document.getElementById("refCode").textContent);
+    btn.textContent = "Copied!";
+    setTimeout(() => { btn.textContent = "Copy"; }, 1500);
+  }catch(e){
+    btn.textContent = "Failed";
+    setTimeout(() => { btn.textContent = "Copy"; }, 1500);
+  }
+});
+
 submitBtn.addEventListener("click", async () => {
   if(!validate()) return;
   const entry = {
@@ -487,6 +567,14 @@ submitBtn.addEventListener("click", async () => {
     document.getElementById("refCode").textContent = entry.id;
     document.getElementById("formView").style.display = "none";
     document.getElementById("confirmView").style.display = "block";
+    launchConfetti();
+
+    // Close the guest's Vans window if it's still open — the design is
+    // saved now, no reason to leave it hanging around for the next person.
+    if(openedWindow && !openedWindow.closed){
+      try{ openedWindow.close(); }catch(err){}
+    }
+    if(pollTimer){ clearInterval(pollTimer); pollTimer = null; }
   }catch(e){
     console.error("Save failed:", e);
     document.getElementById("submitStatus").textContent =
@@ -494,6 +582,38 @@ submitBtn.addEventListener("click", async () => {
     submitBtn.disabled = false;
   }
 });
+
+function resetForNextGuest(){
+  // Clear every field back to blank.
+  ["clientName","clientCompany","clientTitle","shipFirst","shipLast",
+   "addr1","addr2","city","state","zip","shoeSize"].forEach(id => {
+    document.getElementById(id).value = "";
+  });
+  designUrlInput.value = "";
+  disclaimerBox.checked = false;
+  submitBtn.disabled = true;
+  clearErrors();
+  document.getElementById("submitStatus").textContent = "";
+
+  // Reset the design-link status box back to its starting state.
+  linkStatusBox.style.display = "none";
+  linkStatusBox.classList.remove("done");
+  linkStatusBox.classList.add("waiting");
+  linkStatusIcon.textContent = "\u2026";
+  linkStatusText.innerHTML = "<strong>Hanging tight while you create...</strong>Once you're done on Vans, come back here and paste your link below.";
+  waitingForReturn = false;
+  openedWindow = null;
+
+  // Reset the progress bar.
+  dot1.classList.add("active"); dot1.classList.remove("done");
+  dot2.classList.remove("active"); dot2.classList.remove("done");
+
+  // Swap back to the form and scroll to the top for the next guest.
+  document.getElementById("confirmView").style.display = "none";
+  document.getElementById("formView").style.display = "block";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+document.getElementById("nextGuestBtn").addEventListener("click", resetForNextGuest);
 
 /* ---------------------------- Master sheet (team) ---------------------------- */
 const teamToggleBtn = document.getElementById("teamToggleBtn");
@@ -630,7 +750,12 @@ teamUnlockBtn.addEventListener("click", async () => {
   try{
     unlockedList = await loadSubmissions(code);
   }catch(e){
-    masterListWrap.innerHTML = "<p class='error'>Incorrect access code.</p>";
+    console.error("Master sheet unlock failed:", e);
+    if(e.message === "unauthorized"){
+      masterListWrap.innerHTML = "<p class='error'>Incorrect access code.</p>";
+    }else{
+      masterListWrap.innerHTML = "<p class='error'>Couldn't reach the server (" + e.message + "). This isn't a wrong code — something's off with the deployment. Try again in a moment.</p>";
+    }
     return;
   }
   exportCsvBtn.style.display = "inline-block";
