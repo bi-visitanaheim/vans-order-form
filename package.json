@@ -2,6 +2,7 @@
   "name": "vans-order-form-api",
   "version": "1.0.0",
   "private": true,
+  "engines": { "node": "20" },
   "dependencies": {
     "@azure/data-tables": "^13.2.2"
   }
